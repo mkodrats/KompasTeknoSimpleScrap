@@ -9,11 +9,12 @@ soup = BeautifulSoup(req.text, 'html.parser')
 news  = soup.select('div.article__list.clearfix')
 data = []
 for row in news:
-    title = row.select('h3.article__title.article__title--medium')[0].text.encode('utf-8')
+    title = row.select('h3.article__title.article__title--medium')[0].text.encode('utf-8').strip()
     link  = row.select('h3.article__title.article__title--medium > a')[0]['href']
     lokasi_isi = requests.get(link)
     soup = BeautifulSoup(lokasi_isi.text, 'html.parser')
-    isi = soup.select('div.read__content')[0].text.encode('utf-8')
+    isi = soup.select('div.read__content')[0].text.encode('utf-8').strip()
+    isi = isi.replace("googletag.cmd.push(function() { googletag.display('div-gpt-ad-974648810682144181-4112'); });","").rstrip()
     data.append([title, isi])
 
     print data
